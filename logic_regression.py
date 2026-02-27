@@ -53,21 +53,6 @@ def show_origin_data(data):
     plt.show()
 
 
-def evaluate_model(y_true, y_pred):
-    """
-    评估模型性能
-
-    Args:
-        y_true: 真实标签
-        y_pred: 预测结果
-
-    Returns:
-        acc: 准确率
-    """
-    acc = accuracy_score(y_true, y_pred)
-    return acc
-
-
 def create_second_order_features(X):
     """
     构造二阶特征
@@ -235,17 +220,17 @@ def main():
     """
     # 加载数据
     data, X, y = load_data("examdata.csv")
-
+    show_origin_data(data)
     # 训练一阶模型
     print("=== First Order Model ===")
     model_first = LogisticRegression(max_iter=1000)
     model_first.fit(X, y)
     y_pred_first = model_first.predict(X)
-    acc_first = evaluate_model(y, y_pred_first)
+    acc_first = accuracy_score(y, y_pred_first)
     print(f"Accuracy: {acc_first}")
 
     # 测试一阶模型
-    result_first = test_first_order_model(model_first, exam1=80, exam2=60)
+    result_first = test_first_order_model(model_first, exam1=65, exam2=60)
     print(f"Test result: {result_first}")
 
     # 绘制一阶边界
@@ -259,11 +244,11 @@ def main():
     model_second = LogisticRegression(max_iter=1000)
     model_second.fit(X_second, y)
     y_pred_second = model_second.predict(X_second)
-    acc_second = evaluate_model(y, y_pred_second)
+    acc_second = accuracy_score(y, y_pred_second)
     print(f"Accuracy: {acc_second}")
 
     # 测试二阶模型
-    result_second = test_second_order_model(model_second, exam1=80, exam2=60)
+    result_second = test_second_order_model(model_second, exam1=60, exam2=65)
     print(f"Test result: {result_second}")
 
     # 绘制二阶边界
