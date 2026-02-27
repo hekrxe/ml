@@ -1,0 +1,8 @@
+{
+  "files.readonlyInclude": {
+    "**/venv/**": true,
+    "**/__pycache__/**": true,
+    "**/*.csv": true,
+  },
+  "editor.formatOnSave": true
+}
