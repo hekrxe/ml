@@ -219,7 +219,7 @@ def main():
     主函数
     """
     # 加载数据
-    data, X, y = load_data("examdata.csv")
+    data, X, y = load_data("data/examdata.csv")
     show_origin_data(data)
     # 训练一阶模型
     print("=== First Order Model ===")

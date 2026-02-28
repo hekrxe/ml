@@ -2,7 +2,7 @@
   "files.readonlyInclude": {
     "**/venv/**": true,
     "**/__pycache__/**": true,
-    "**/*.csv": true,
+    "data/**": true,
   },
   "editor.formatOnSave": true
 }
