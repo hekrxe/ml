@@ -40,8 +40,8 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import accuracy_score
 
 
-def show_data(X, y, title, show=True, func=None):
-    plt.figure(figsize=(10, 6))
+def show_data(X, y, title, show=False, func=None):
+    # plt.figure(figsize=(10, 6))
     l1 = plt.scatter(X.loc[:, "V1"][y == 0], X.loc[:, "V2"][y == 0])
     l2 = plt.scatter(X.loc[:, "V1"][y == 1], X.loc[:, "V2"][y == 1])
     l3 = plt.scatter(X.loc[:, "V1"][y == 2], X.loc[:, "V2"][y == 2])
@@ -53,6 +53,14 @@ def show_data(X, y, title, show=True, func=None):
         func()
     if show:
         plt.show()
+
+
+def compare_data(X, y, y_pred, title="origin data", func=None):
+    plt.figure(figsize=(10, 6))
+    plt.subplot(1, 2, 1)
+    show_data(X, y, "origin data")
+    plt.subplot(1, 2, 2)
+    show_data(X, y_pred, title, show=True, func=func)
 
 
 def kmeans(data):
@@ -72,24 +80,45 @@ def kmeans(data):
     y_checked = np.where(y_pred == 0, 1, np.where(y_pred == 1, 2, 0))
     acc = accuracy_score(y, y_checked)
     print("checked kmeans accuracy:", acc)
-
-    show_data(X, y, "origin data", show=False)
-    show_data(
+    compare_data(
         X,
+        y,
         y_checked,
-        "k-means clustering",
+        title="k-means clustering",
         func=lambda: plt.scatter(centers[:, 0], centers[:, 1], color="r"),
     )
 
 
-def knn():
-    pass
+def knn(data):
+    from sklearn.neighbors import KNeighborsClassifier
+
+    X = data.drop(["labels"], axis=1)
+    y = data.loc[:, "labels"]
+    knn = KNeighborsClassifier(n_neighbors=3).fit(X, y)
+    y_pred = knn.predict(X)
+    print("knn accuracy:", accuracy_score(y, y_pred))
+    compare_data(X, y, y_pred, title="knn clustering")
 
 
-def meanshift():
-    pass
+def meanshift(data):
+    from sklearn.cluster import MeanShift
+    from sklearn.cluster import estimate_bandwidth
+
+    X = data.drop(["labels"], axis=1)
+    y = data.loc[:, "labels"]
+
+    # 计算带宽
+    bandwidth = estimate_bandwidth(X, n_samples=300)
+    print("bandwidth:", bandwidth)
+
+    meanshift = MeanShift(bandwidth=bandwidth).fit(X)
+    y_pred = meanshift.predict(X)
+    print("meanshift accuracy:", accuracy_score(y, y_pred))
+    y_checked = np.where(y_pred == 0, 2, np.where(y_pred == 2, 0, 1))
+    print("checked meanshift accuracy:", accuracy_score(y, y_checked))
+    compare_data(X, y, y_checked, title="meanshift clustering")
 
 
 if __name__ == "__main__":
     data = pd.read_csv("data\\kmeans_knn_meanshift_data.csv")
-    kmeans(data)
+    meanshift(data)
