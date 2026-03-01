@@ -120,5 +120,5 @@ def meanshift(data):
 
 
 if __name__ == "__main__":
-    data = pd.read_csv("data\\kmeans_knn_meanshift_data.csv")
+    data = pd.read_csv("data/kmeans_knn_meanshift_data.csv")
     meanshift(data)

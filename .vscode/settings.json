@@ -4,5 +4,10 @@
     "**/__pycache__/**": true,
     "data/**": true,
   },
+  "python.terminal.activateEnvironment": true,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+  },
   "editor.formatOnSave": true
 }

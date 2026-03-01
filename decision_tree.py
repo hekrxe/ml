@@ -25,7 +25,7 @@ from sklearn.metrics import accuracy_score
 from matplotlib import pyplot as plt
 
 if __name__ == "__main__":
-    data = pd.read_csv("data\\iris_data.csv")
+    data = pd.read_csv("data/iris_data.csv")
     X = data.drop(["target", "label"], axis=1)
     y = data.loc[:, "target"]
     tclf = tree.DecisionTreeClassifier(
