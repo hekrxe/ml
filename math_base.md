@@ -266,14 +266,17 @@ TODO
 
 ## 条件概率
 $$
-P(A|B) = \frac{P(AB)}{P(B)}
+P(A|B)=\frac{P(AB)}{P(B)}
 $$
+
 即B发生的概率作为A发生的概率的样本空间,AB同时发生的概率。
 ## 全概率公式
 $$
-P(B) = \sum_{i=1}^n P(A_i)P(B|A_i)
+P(B)=\sum_{i=1}^n P(A_i)P(B|A_i)
 $$
-$B_0,$ $B_1,$ $B_2,$ ..., $B_n$ 是事件 $B$ 的一个完备事件组, 即 $B_i$ 与 $B_j$ 是互斥事件, 且 $\bigcup_{i=1}^n B_i = B$.
+
+$B_0,$ $B_1,$...$B_n$ 是事件 $B$ 的一个完备事件组, 即 $B_i$ 与 $B_j$ 是互斥事件, 且 $\bigcup_{i=1}^n B_i = B$.
+
 ## 贝叶斯公式
 $$
 P(A_i|B) = \frac{P(B|A_i)P(A_i)}{\sum_{i=1}^n P(A_i)P(B|A_i)}
