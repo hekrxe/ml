@@ -1,24 +1,29 @@
 # 字符级LSTM文本生成
 
-data = (
-    (
-        "flare is a teacher in ai industry. He obtained his phd in Australia. Australia is a country in the Southern Hemisphere."
-        * 50
-    )
-    .replace("\n", "")
-    .replace("\r", "")
-)
 
+def formate_doc():
+    newtxt = []
+    for line in open("data/daodejing.txt", "r").readlines():
+        line = line.replace("\r", "").replace("\n", "").lstrip("0123456789. ")
+        if not line:
+            continue
+        newtxt.append(line)
+    open("data/daodejing1.txt", "w").writelines("\n".join(newtxt))
+
+
+data = open("data/daodejing.txt", "r").read().replace("\n", "").replace("\r", "") * 2
 # 字符去重处理
 letters = list(set(data))
 num_letters = len(letters)
+
+print(">>>", data[:100], f"...[{len(data)}]", "letters:", num_letters)
 
 # 建立字典
 int_to_char = {a: b for a, b in enumerate(letters)}
 char_to_int = {b: a for a, b in enumerate(letters)}
 
 # 20个字符预测第21个
-time_step = 20
+time_step = 30
 
 import numpy as np
 from keras.utils import to_categorical
@@ -65,22 +70,25 @@ from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=6)
 y_train_category = to_categorical(y_train, num_letters)
-print(f"train shape: X={X_train.shape}, y={len(y_train)}")
-print(f"test shape: X={X_test.shape}, y={len(y_test)}")
-print(f"y_train_category shape: {y_train_category.shape}")
 
 
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Input
+from keras.optimizers import Adam
+
 
 model = Sequential()
 model.add(Input(shape=(X_train.shape[1], X_train.shape[2])))
-model.add(LSTM(units=20, activation="relu"))
+model.add(LSTM(units=time_step, activation="relu"))
 model.add(Dense(units=num_letters, activation="softmax"))
-model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+model.compile(
+    optimizer=Adam(learning_rate=0.01),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
 model.summary()
 
-model.fit(X_train, y_train_category, epochs=8, batch_size=10)
+model.fit(X_train, y_train_category, epochs=29, batch_size=37)
 
 y_train_pred = model.predict(X_train).argmax(axis=-1)
 y_test_pred = model.predict(X_test).argmax(axis=-1)
@@ -88,10 +96,10 @@ from sklearn.metrics import accuracy_score
 
 train_accuracy = accuracy_score(y_train, y_train_pred)
 test_accuracy = accuracy_score(y_test, y_test_pred)
-print(f"training Accuracy: {train_accuracy:.4f}")
-print(f"test Accuracy: {test_accuracy:.4f}")
+print(f"training accuracy: {train_accuracy:.4f}", f"test accuracy: {test_accuracy:.4f}")
 
-new_letters = "flare is a teacher in ai industry. He obtained his phd in Australia."
+new_letters = "小国寡民。使有什伯之器而不用。使民重死而不远徙。虽有舟舆无所乘之。虽有甲兵无所陈之。使民复结绳而用之。甘其食、美其服、安其居、乐其俗。邻国相望，鸡犬之声相闻。民至老死不相往来。"
 X_new, y_new = data_processing(new_letters, time_step, num_letters, char_to_int)
 y_new_pred = model.predict(X_new).argmax(axis=-1)
-print("new prediction: ", "".join([int_to_char[i] for i in y_new_pred]))
+print(">>>:", new_letters)
+print("<<<:", "。" * time_step, "".join([int_to_char[i] for i in y_new_pred]))
