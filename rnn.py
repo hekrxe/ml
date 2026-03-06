@@ -7,10 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from keras.models import Sequential
-from keras.layers import Dense, SimpleRNN, Input, Dropout
-from keras.callbacks import EarlyStopping
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import r2_score
+from keras.layers import Dense, SimpleRNN, Input
 
 
 def get_Xy(price, time_step=10):
