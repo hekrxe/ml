@@ -61,7 +61,6 @@ class Network(object):
 
     def feedforward(self, x):
         # 即 wx+b
-        # 该函数接受一个输入向量 x，并返回网络的输出
         for b, w in zip(self.biases, self.weights):
             x = self.sigmoid(np.dot(w, x) + b)
         return x
